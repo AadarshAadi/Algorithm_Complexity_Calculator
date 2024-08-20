@@ -10,12 +10,12 @@ public class IfStatementPattern {
         return matcher.find();
     }
     public static int getComparisonCount(String text) {
-        String patternString = "([a-zA-Z_][a-zA-Z0-9_]*)\\s*(==|!=|<=|>=|<|>)\\s*([0-9]+)";
+        String patternString = "([a-zA-Z_][a-zA-Z0-9_]*\\s*(\\[\\s*[0-9]+\\s*\\])?)\\s*(==|!=|<=|>=|<|>)\\s*([a-zA-Z_][a-zA-Z0-9_]*\\s*(\\[\\s*[0-9]+\\s*\\])?|[0-9]+)";
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
-            String operator = matcher.group(2);
-            int value = Integer.parseInt(matcher.group(3));
+            String operator = matcher.group(3);
+            int value = Integer.parseInt(matcher.group(4).replaceAll("\\[\\s*[0-9]+\\s*\\]", "").trim());
             switch (operator) {
                 case "==":
                 case "!=":
