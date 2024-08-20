@@ -4,6 +4,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.LinkedList;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 public class complexitymain extends AppCompatActivity {
     EditText algo;
     Button analyze;
@@ -20,18 +23,50 @@ public class complexitymain extends AppCompatActivity {
             for (String line : lines) {
                 afg.add(line);
             }
+            displayanalysis();
         });
-        for(String line : afg)
-        {
-            if(line.contains("Algorithm")||line.contains("algorithm"))
-            {}
-            else if (line.contains("{")||line.contains("}"))
-            {}
-            else if (var2.check1(line))
-            {}
-            else {
-
+    }
+    public void displayanalysis() {
+        setContentView(R.layout.table);
+        TableLayout resultTable = findViewById(R.id.resultTable);
+        for (String line : afg) {
+            TableRow row = new TableRow(this);
+            if (line.contains("Algorithm") || line.contains("algorithm")) {
+                addTableRow(row, line, "0", "-", "-");
+            } else if (line.contains("{") || line.contains("}")) {
+                addTableRow(row,line,"0","-","-");
+            } else if (var2.check1(line)) {
+                addTableRow(row, line, "1", "1", "1");
+            } else if (line.contains("return")) {
+                if (line.contains("0.0")) {
+                    addTableRow(row, line, "1", "1", "1");
+                } else {
+                    addTableRow(row, line, "1", "0", "0");
+                }
+            } else {
+                addTableRow(row, line, "-", "-", "-");
             }
+            resultTable.addView(row);
         }
     }
+    private void addTableRow(TableRow row, String statement, String s_e, String frequency, String totalSteps) {
+        TextView statementView = new TextView(this);
+        statementView.setPadding(8, 8, 8, 8);
+        statementView.setText(statement);
+        TextView seView = new TextView(this);
+        seView.setPadding(8, 8, 8, 8);
+        seView.setText(s_e);
+        TextView frequencyView = new TextView(this);
+        frequencyView.setPadding(8, 8, 8, 8);
+        frequencyView.setText(frequency);
+        TextView totalStepsView = new TextView(this);
+        totalStepsView.setPadding(8, 8, 8, 8);
+        totalStepsView.setText(totalSteps);
+        row.addView(statementView);
+        row.addView(seView);
+        row.addView(frequencyView);
+        row.addView(totalStepsView);
+    }
+
+
 }
