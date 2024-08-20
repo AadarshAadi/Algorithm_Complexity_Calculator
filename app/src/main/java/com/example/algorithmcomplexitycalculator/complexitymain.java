@@ -52,6 +52,8 @@ public class complexitymain extends AppCompatActivity {
                 addTableRow(row,line,"1",Integer.toString(var3.getComparisonCount(line)),Integer.toString(var3.getComparisonCount(line)));
             } else if (var4.checkk(line)) {
                 addTableRow(row,line,"1","1","1");
+            } else if (line.contains("else")) {
+                addTableRow(row,line,"1","1","1");
             } else {
                 addTableRow(row, line, "-", "-", "-");
             }
