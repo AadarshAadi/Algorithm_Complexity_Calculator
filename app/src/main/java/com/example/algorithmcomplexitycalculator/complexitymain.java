@@ -1,4 +1,5 @@
 package com.example.algorithmcomplexitycalculator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,18 +10,18 @@ import java.util.LinkedList;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 public class complexitymain extends AppCompatActivity {
     EditText algo;
     Button analyze;
     Button fin;
+    Button back;
+    Button fg;
     LinkedList<String> afg = new LinkedList<>();
     VariableAssignmentPattern var2;
     IfStatementPattern var3;
     arithpatternmatcher var4;
     ForLoopPatternMatcher forLoopMatcher;
-    String outerLoop = null;  // To track outer for loop for nesting
-
+    String outerLoop = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +43,13 @@ public class complexitymain extends AppCompatActivity {
             }
         });
     }
-
     public void displayanalysis() {
         setContentView(R.layout.table);
         analyze=findViewById(R.id.button3);
         analyze.setOnClickListener(view -> {setContentView(R.layout.main_area);});
         TableLayout resultTable = findViewById(R.id.resultTable);
         fin=findViewById(R.id.findButton);
+        back=findViewById(R.id.button3);
         for (String line : afg) {
             TableRow row = new TableRow(this);
 
@@ -105,30 +106,58 @@ public class complexitymain extends AppCompatActivity {
         }
         fin.setOnClickListener(view -> {
             setContentView(R.layout.dfg);
+            fg=findViewById(R.id.button2);
+            fg.setOnClickListener(view1 -> {
+                String input = algo.getText().toString();
+                if (!input.isEmpty()) {
+                    afg.clear();
+                    String[] lines = input.split("\n");
+                    Collections.addAll(afg, lines);
+                    displayanalysis();
+                }
+            });
             calculateComplexity();
-
+        });
+        back.setOnClickListener(view -> {
+            setContentView(R.layout.main_area);
         });
 
     }
     private void addTableRow(TableRow row, String statement, String s_e, String frequency, String totalSteps) {
-        TextView statementView = createTextView(statement);
-        TextView seView = createTextView(s_e);
-        TextView frequencyView = createTextView(frequency);
-        TextView totalStepsView = createTextView(totalSteps);
+        TextView statementView = new TextView(this);
+        statementView.setPadding(8, 8, 8, 8);
+        statementView.setText(statement);
+        statementView.setTextColor(Color.BLACK); // Set text color to black
+
+        TextView seView = new TextView(this);
+        seView.setPadding(8, 8, 8, 8);
+        seView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        seView.setText(s_e);
+        seView.setTextColor(Color.BLACK); // Set text color to black
+
+        TextView frequencyView = new TextView(this);
+        frequencyView.setPadding(8, 8, 8, 8);
+        frequencyView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        frequencyView.setText(frequency);
+        frequencyView.setTextColor(Color.BLACK); // Set text color to black
+
+        TextView totalStepsView = new TextView(this);
+        totalStepsView.setPadding(8, 8, 8, 8);
+        totalStepsView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        totalStepsView.setText(totalSteps);
+        totalStepsView.setTextColor(Color.BLACK); // Set text color to black
 
         row.addView(statementView);
         row.addView(seView);
         row.addView(frequencyView);
         row.addView(totalStepsView);
     }
-
-    // Helper method to create a TextView with text wrapping enabled
     private TextView createTextView(String text) {
         TextView textView = new TextView(this);
         textView.setPadding(8, 8, 8, 8);
         textView.setText(text);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textView.setMaxWidth(200); // Set a max width to ensure wrapping occurs (adjust as needed)
+        textView.setMaxWidth(200);
         textView.setSingleLine(false);
         textView.setEllipsize(null); // Disable ellipsizing (three dots)
         textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -153,12 +182,10 @@ public class complexitymain extends AppCompatActivity {
         }
 
         if (maxDepth > 0) {
-            // Create the complexity string based on variables used in the nested loops
             StringBuilder complexityBuilder = new StringBuilder("O(");
             String variableString = "";
 
             for (int i = 0; i < maxDepth; i++) {
-                // Assuming 'n' is the variable used in each loop level
                 if (i == 0) {
                     variableString = "n";
                 } else {
@@ -169,14 +196,9 @@ public class complexitymain extends AppCompatActivity {
             complexityBuilder.append(variableString).append(")");
             complexity = complexityBuilder.toString();
         }
-
-        // Display the calculated complexity
         TextView complexityView = findViewById(R.id.dkff);
         complexityView.setText(complexity);
     }
-
-
-
     private String extractVariable(String loopLine) {
         // This method extracts the loop variable from a loop line
         // For example, from "for(i=1;i<=n;i++)", it should return "i"
