@@ -1,5 +1,6 @@
 package com.example.algorithmcomplexitycalculator;
 
+import java.util.Objects;
 import java.util.regex.*;
 
 public class IfStatementPattern {
@@ -16,14 +17,14 @@ public class IfStatementPattern {
         if (matcher.find()) {
             String operator = matcher.group(3);
             int value = Integer.parseInt(matcher.group(4).replaceAll("\\[\\s*[0-9]+\\s*\\]", "").trim());
-            switch (operator) {
+            switch (Objects.requireNonNull(operator)) {
                 case "==":
                 case "!=":
+                case "<":
+                case ">":
                     return 1;
                 case "<=":
                 case ">=":
-                case "<":
-                case ">":
                     return 2;
                 default:
                     return 0;
