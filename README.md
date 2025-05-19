@@ -1,6 +1,3 @@
-Here you go:
-
-```markdown
 # Algorithm Complexity Calculator
 
 ## Overview
@@ -49,13 +46,13 @@ for (i = 1; i <= n; i++) {
 
 ## Pseudocode
 
-```plaintext
+
 FOR each loop in input
     COUNT frequency of operations
     CALCULATE total steps
     DISPLAY results
 END FOR
-```
+
 
 ## Installation
 
